@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Mantenimiento</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="computadores.html">Computadores</a></li>
+                <li><a href="software.html">Software</a></li>
+                <li><a href="mantenimiento.html" class="active">Mantenimiento</a></li>
+                <li><a href="repuestos.html">repuestos</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Registro de Mantenimiento</h1>
+        <p>Aquí puedes registrar y hacer seguimiento de los mantenimientos realizados.</p>
+        
+        <form id="mantenimientoForm">
+            <label for="computador">Computador:</label>
+            <select id="computador" name="computador" onchange="mostrarDueno()">
+                <option value="1">PC-001</option>
+                <option value="2">PC-002</option>
+                <option value="3">PC-003</option>
+                <!-- Las opciones se generarán dinámicamente desde la base de datos -->
+            </select>
+
+            <!-- Nuevo campo para mostrar el dueño del computador -->
+            <label for="dueno">Dueño del Computador:</label>
+            <input type="text" id="dueno" name="dueno" readonly>
+
+            <label for="fecha">Fecha de Mantenimiento:</label>
+            <input type="date" id="fecha" name="fecha" required>
+
+            <label for="tecnico">Técnico Responsable:</label>
+            <input type="text" id="tecnico" name="tecnico" required>
+
+            <label for="repuestos">Repuestos Utilizados:</label>
+            <select id="repuestos" name="repuestos[]" multiple>
+                <!-- Las opciones se generarán dinámicamente desde la base de datos -->
+            </select>
+
+            <label for="descripcion">Descripción del Mantenimiento:</label>
+            <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+
+            <td>
+                <button type="button" onclick="editarMantenimiento(1)">Editar mantenimiento</button>
+                <button type="button" onclick="borrarMantenimiento(1)">Borrar mantenimiento</button>
+                <button type="submit">Guardar mantenimiento</button>
+            </td>
+        </form>
+
+        <h2>Mantenimientos Realizados</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Computador</th>
+                    <th>Dueño</th>
+                    <th>Fecha</th>
+                    <th>Técnico</th>
+                    <th>Repuestos</th>
+                    <th>Descripción</th>
+                    <th>Días desde último mantenimiento</th> <!-- Nueva columna para días -->
+                </tr>
+            </thead>
+            <tbody id="mantenimientosTable">
+                <!-- Las filas se generarán dinámicamente -->
+            </tbody>
+        </table>
+    </main>
+    <footer>
+        <p>&copy; 2024 Gestión de Computadores. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        // Simulación de base de datos de dueños de computadores
+        var duenos = {
+            1: "Juan Pérez",
+            2: "María González",
+            3: "Carlos López"
+        };
+
+        // Simulación de mantenimientos realizados
+        var mantenimientos = [
+            { id: 1, computador: 1, dueno: duenos[1], fecha: '2024-08-01', tecnico: 'Luis', descripcion: 'Mantenimiento preventivo' },
+            { id: 2, computador: 2, dueno: duenos[2], fecha: '2024-09-10', tecnico: 'Ana', descripcion: 'Cambio de disco duro' },
+            // Añadir más mantenimientos según sea necesario
+        ];
+
+        // Función para mostrar el dueño del computador seleccionado
+        function mostrarDueno() {
+            var idComputador = document.getElementById('computador').value;
+            document.getElementById('dueno').value = duenos[idComputador] || "Dueño desconocido";
+            calcularDiasDesdeUltimoMantenimiento(idComputador);
+        }
+
+        // Función para calcular días desde el último mantenimiento
+        function calcularDiasDesdeUltimoMantenimiento(idComputador) {
+            const mantenimiento = mantenimientos.find(m => m.computador == idComputador);
+            const diasCell = document.querySelector(`tr[data-computador="${idComputador}"] td:last-child`);
+            if (mantenimiento) {
+                const fechaUltimoMantenimiento = new Date(mantenimiento.fecha);
+                const fechaHoy = new Date();
+                const diffTime = Math.abs(fechaHoy - fechaUltimoMantenimiento);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convertir milisegundos a días
+                diasCell.textContent = diffDays + " días";
+            } else {
+                diasCell.textContent = "No hay mantenimiento registrado";
+            }
+        }
+
+        // Función para guardar o editar un mantenimiento
+        function guardarMantenimiento() {
+            const computador = document.getElementById('computador').value;
+            const dueno = document.getElementById('dueno').value;
+            const fecha = document.getElementById('fecha').value;
+            const tecnico = document.getElementById('tecnico').value;
+            const descripcion = document.getElementById('descripcion').value;
+
+            // Crear nuevo mantenimiento
+            const nuevoMantenimiento = {
+                id: mantenimientos.length + 1,
+                computador: computador,
+                dueno: dueno,
+                fecha: fecha,
+                tecnico: tecnico,
+                descripcion: descripcion
+            };
+            mantenimientos.push(nuevoMantenimiento);
+            
+            // Limpiar formulario y actualizar tabla
+            document.getElementById('mantenimientoForm').reset();
+            document.getElementById('id_mantenimiento').value = '';
+            actualizarTabla();
+        }
+
+        // Función para actualizar la tabla de mantenimientos
+        function actualizarTabla() {
+            const tbody = document.getElementById('mantenimientosTable');
+            tbody.innerHTML = ''; // Limpiar tabla
+
+            mantenimientos.forEach(mantenimiento => {
+                const row = document.createElement('tr');
+                row.setAttribute('data-computador', mantenimiento.computador); // Establecer atributo de datos para identificación
+
+                row.innerHTML = `
+                    <td>${mantenimiento.id}</td>
+                    <td>PC-${mantenimiento.computador}</td>
+                    <td>${mantenimiento.dueno}</td>
+                    <td>${mantenimiento.fecha}</td>
+                    <td>${mantenimiento.tecnico}</td>
+                    <td></td> <!-- Columna para repuestos -->
+                    <td>${mantenimiento.descripcion}</td>
+                    <td></td> <!-- Columna para días desde el último mantenimiento -->
+                `;
+
+                tbody.appendChild(row); // Añadir fila a la tabla
+                calcularDiasDesdeUltimoMantenimiento(mantenimiento.computador); // Calcular días para la fila actual
+            });
+        }
+    </script>
+</body>
+</html>
+

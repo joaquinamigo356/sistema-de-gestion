@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Computador</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <h2>Agregar Computador</h2>
+    <form action="/computadores/crear" method="post">
+        <label for="marca">Marca:</label>
+        <input type="text" id="marca" name="marca" required>
+
+        <label for="modelo">Modelo:</label>
+        <input type="text" id="modelo" name="modelo" required>
+
+        <label for="procesador">Procesador:</label>
+        <input type="text" id="procesador" name="procesador" required>
+
+        <label for="ram">RAM:</label>
+        <input type="number" id="ram" name="ram" required>
+
+        <label for="almacenamiento">Almacenamiento:</label>
+        <input type="number" id="almacenamiento" name="almacenamiento" required>
+
+        <button type="submit">Guardar</button>
+    </form>
+</body>
+</html>
+

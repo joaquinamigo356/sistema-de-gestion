@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Computadores</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="computadores.html" class="active">Computadores</a></li>
+                <li><a href="software.html">Software</a></li>
+                <li><a href="mantenimiento.html">Mantenimiento</a></li>
+                <li><a href="repuestos.html">repuestos</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Gestión de Computadores</h1>
+        <p>Aquí puedes registrar y gestionar los computadores en el sistema.</p>
+        <form action="guardar_computador.php" method="post">
+            <label for="nombre">usuario del computador:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="modelo">Modelo:</label>
+            <input type="text" id="modelo" name="modelo">
+
+            <label for="marca">Marca:</label>
+            <input type="text" id="marca" name="marca">
+
+            <label for="numero_serie">Número de Serie:</label>
+            <input type="text" id="numero_serie" name="numero_serie" required>
+            <td>
+                <button type="button" onclick="editarComputador(1)">Editar computador</button>
+                <button type="button" onclick="borrarComputador(1)">Borrar computador</button>
+                <button type="submit">Guardar Computador</button>
+            </td>
+        </form>
+
+        <h2>Computadores Registrados</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>usuario del computador</th>
+                    <th>Nombre</th>
+                    <th>Modelo</th>
+                    <th>Marca</th>
+                    <th>Número de Serie</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las filas se generarán dinámicamente desde la base de datos -->
+            </tbody>
+        </table>
+    </main>
+    <footer>
+        <p>&copy; 2024 Gestión de Computadores. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
+
+

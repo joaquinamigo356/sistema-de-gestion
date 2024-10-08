@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Reclamos</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="computadores.html">Computadores</a></li>
+                <li><a href="usuarios.html">Usuarios</a></li>
+                <li><a href="reclamos.html" class="active">Reclamos</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Gestión de Reclamos</h1>
+        <p>Aquí puedes registrar y gestionar los reclamos de los usuarios.</p>
+        <form action="guardar_reclamo.php" method="post">
+            <label for="usuario">Usuario:</label>
+            <select id="usuario" name="usuario">
+                <!-- Las opciones se generarán dinámicamente desde la base de datos -->
+            </select>
+
+            <label for="computador">Computador:</label>
+            <select id="computador" name="computador">
+                <!-- Las opciones se generarán dinámicamente desde la base de datos -->
+            </select>
+
+            <label for="descripcion">Descripción del Reclamo:</label>
+            <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+
+            <td>
+                <button type="button" onclick="editarComputador(1)">Editar reclamo</button>
+                <button type="button" onclick="borrarComputador(1)">Borrar reclamo</button>
+                <button type="submit">enviar reclamo</button>
+            </td>
+        </form>
+
+        <h2>Reclamos Recibidos</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Usuario</th>
+                    <th>Computador</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las filas se generarán dinámicamente desde la base de datos -->
+            </tbody>
+        </table>
+    </main>
+    <footer>
+        <p>&copy; 2024 Gestión de Computadores. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
+

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Repuestos</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="computadores.html">Computadores</a></li>
+                <li><a href="software.html">Software</a></li>
+                <li><a href="mantenimiento.html">Mantenimiento</a></li>
+                <li><a href="repuestos.html" class="active">Repuestos</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Gestión de Repuestos</h1>
+        <p>Aquí puedes registrar y gestionar los repuestos disponibles en el sistema.</p>
+        <form id="repuestoForm">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" rows="4"></textarea>
+
+            <label for="cantidad">Cantidad Disponible:</label>
+            <input type="number" id="cantidad" name="cantidad" value="0" required>
+
+            <label for="computador">Computador:</label>
+            <select id="computador" name="computador">
+                <option value="1">PC-001</option>
+                <option value="2">PC-002</option>
+                <option value="3">PC-003</option>
+                <!-- Las opciones se generarán dinámicamente desde la base de datos -->
+            </select>
+
+            <td>
+                <button type="button" onclick="editarRepuesto(1)">Editar repuestos</button>
+                <button type="button" onclick="borrarRepuesto(1)">Borrar repuestos</button>
+                <button type="submit" onclick="guardarRepuesto(event)">Guardar repuestos</button>
+            </td>
+        </form>
+
+        <h2>Repuestos Disponibles</h2>
+        <table>
+            <thead>
+                <tr>
+        
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Cantidad Disponible</th>
+                    <th>Computador</th> <!-- Nueva columna para el computador -->
+                </tr>
+            </thead>
+            <tbody id="repuestosTable">
+                <!-- Las filas se generarán dinámicamente -->
+            </tbody>
+        </table>
+    </main>
+    <footer>
+        <p>&copy; 2024 Gestión de Computadores. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        // Simulación de base de datos de repuestos
+        var repuestos = [];
+
+        // Función para guardar un nuevo repuesto
+        function guardarRepuesto(event) {
+            event.preventDefault(); // Evitar el envío del formulario
+
+            const nombre = document.getElementById('nombre').value;
+            const descripcion = document.getElementById('descripcion').value;
+            const cantidad = document.getElementById('cantidad').value;
+            const computador = document.getElementById('computador').value;
+
+            // Crear nuevo repuesto
+            const nuevoRepuesto = {
+                id: repuestos.length + 1,
+                nombre: nombre,
+                descripcion: descripcion,
+                cantidad: cantidad,
+                computador: computador === "1" ? "PC-001" : computador === "2" ? "PC-002" : "PC-003" // Asignar nombre al computador
+            };
+            repuestos.push(nuevoRepuesto);
+            
+            // Limpiar formulario y actualizar tabla
+            document.getElementById('repuestoForm').reset();
+            actualizarTabla();
+        }
+
+        // Función para actualizar la tabla de repuestos
+        function actualizarTabla() {
+            const tbody = document.getElementById('repuestosTable');
+            tbody.innerHTML = ''; // Limpiar tabla
+
+            repuestos.forEach(repuesto => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${repuesto.id}</td>
+                    <td>${repuesto.nombre}</td>
+                    <td>${repuesto.descripcion}</td>
+                    <td>${repuesto.cantidad}</td>
+                    <td>${repuesto.computador}</td> <!-- Mostrar computador -->
+                `;
+                tbody.appendChild(row); // Añadir fila a la tabla
+            });
+        }
+
+        // Funciones para editar y borrar repuestos (simulación)
+        function editarRepuesto(id) {
+            // Lógica para editar un repuesto
+            alert(`Editar repuesto ID: ${id}`);
+        }
+
+        function borrarRepuesto(id) {
+            // Lógica para borrar un repuesto
+            alert(`Borrar repuesto ID: ${id}`);
+        }
+    </script>
+</body>
+</html>

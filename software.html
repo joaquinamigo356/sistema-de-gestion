@@ -1,0 +1,161 @@
+<!DOCTYPE html> 
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Software</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="computadores.html">Computadores</a></li>
+                <li><a href="software.html" class="active">Software</a></li>
+                <li><a href="mantenimiento.html">Mantenimiento</a></li>
+                <li><a href="repuestos.html">repuestos</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Gestión de Software</h1>
+        <p>Aquí puedes registrar y gestionar el software instalado en los computadores.</p>
+        <form action="guardar_software.php" method="post">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="version">Versión:</label>
+            <input type="text" id="version" name="version">
+
+            <label for="licencia">Licencia:</label>
+            <input type="text" id="licencia" name="licencia">
+
+            <!-- Nuevo campo para el ID del usuario -->
+            <label for="id_usuario">ID del Usuario:</label>
+            <input type="number" id="id_usuario" name="id_usuario" required>
+
+            <td>
+                <button type="button" onclick="editarComputador(1)">Editar software</button>
+                <button type="button" onclick="borrarComputador(1)">Borrar software</button>
+                <button type="submit">Guardar software</button>
+            </td>
+        </form>
+
+        <h2>Computador Asociado al Usuario</h2>
+        <form>
+            <label for="id_usuario_buscar">Buscar Computador por ID de Usuario:</label>
+            <input type="number" id="id_usuario_buscar" name="id_usuario_buscar" required>
+            <button type="button" onclick="buscarComputador()">Buscar Computador</button>
+        </form>
+
+        <h3>Detalles del Computador</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre del Computador</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Sistema Operativo</th>
+                </tr>
+            </thead>
+            <tbody id="computadorDetalles">
+                <!-- Los detalles del computador se llenarán dinámicamente -->
+            </tbody>
+        </table>
+
+        <h3>Software Instalado en el Computador</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre del Software</th>
+                    <th>Versión</th>
+                    <th>Licencia</th>
+                </tr>
+            </thead>
+            <tbody id="softwareInstalado">
+                <!-- Los detalles del software se llenarán dinámicamente -->
+            </tbody>
+        </table>
+    </main>
+    <footer>
+        <p>&copy; 2024 Gestión de Computadores. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        // Función para buscar el computador y el software por ID del usuario
+        function buscarComputador() {
+            var idUsuario = document.getElementById('id_usuario_buscar').value;
+
+            // Simulación de base de datos de computadores
+            var computadores = {
+                1: { nombre: "PC-001", marca: "Dell", modelo: "Inspiron 15", sistema: "Windows 10" },
+                2: { nombre: "PC-002", marca: "HP", modelo: "Pavilion", sistema: "Windows 11" },
+                3: { nombre: "PC-003", marca: "Acer", modelo: "Aspire", sistema: "Ubuntu 20.04" }
+            };
+
+            // Simulación de base de datos de software instalado
+            var software = {
+                1: [
+                    { nombre: "Microsoft Office", version: "2019", licencia: "Permanente" },
+                    { nombre: "Adobe Photoshop", version: "2021", licencia: "Suscripción" }
+                ],
+                2: [
+                    { nombre: "Google Chrome", version: "90", licencia: "Libre" },
+                    { nombre: "Visual Studio Code", version: "1.56", licencia: "Libre" }
+                ],
+                3: [
+                    { nombre: "GIMP", version: "2.10", licencia: "Libre" },
+                    { nombre: "LibreOffice", version: "7.0", licencia: "Libre" }
+                ]
+            };
+
+            // Mostrar detalles del computador
+            var computador = computadores[idUsuario];
+
+            if (computador) {
+                document.getElementById('computadorDetalles').innerHTML = `
+                    <tr>
+                        <td>${computador.nombre}</td>
+                        <td>${computador.marca}</td>
+                        <td>${computador.modelo}</td>
+                        <td>${computador.sistema}</td>
+                    </tr>
+                `;
+            } else {
+                document.getElementById('computadorDetalles').innerHTML = `
+                    <tr>
+                        <td colspan="4">No se encontró un computador para este usuario.</td>
+                    </tr>
+                `;
+            }
+
+            // Mostrar software instalado
+            var softwareInstalado = software[idUsuario];
+
+            if (softwareInstalado) {
+                var softwareHtml = softwareInstalado.map(function (item) {
+                    return `
+                        <tr>
+                            <td>${item.nombre}</td>
+                            <td>${item.version}</td>
+                            <td>${item.licencia}</td>
+                        </tr>
+                    `;
+                }).join('');
+                document.getElementById('softwareInstalado').innerHTML = softwareHtml;
+            } else {
+                document.getElementById('softwareInstalado').innerHTML = `
+                    <tr>
+                        <td colspan="3">No se encontró software instalado para este computador.</td>
+                    </tr>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
