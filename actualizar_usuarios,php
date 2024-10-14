@@ -1,0 +1,37 @@
+<?php
+include('conexion.php');
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Verificar si el ID está presente
+    if (isset($_POST['id'])) {
+        // Escapar y asignar los valores enviados desde el formulario
+        $id = $conn->real_escape_string($_POST['id']);
+        $nombre = $conn->real_escape_string($_POST['nombre']);
+        $apellido = $conn->real_escape_string($_POST['apellido']);
+        $correo = $conn->real_escape_string($_POST['correo']);
+        $perfil = $conn->real_escape_string($_POST['perfil']);
+
+        // Consulta para actualizar el usuario
+        $sql = "UPDATE usuarios SET nombre='$nombre', apellido='$apellido', correo='$correo', perfil='$perfil' WHERE id=$id";
+
+        // Ejecutar la consulta y verificar si fue exitosa
+        if ($conn->query($sql) === TRUE) {
+            echo "Usuario actualizado exitosamente.";
+        } else {
+            echo "Error al actualizar el usuario: " . $conn->error;
+        }
+
+        // Cerrar la conexión
+        $conn->close();
+
+        // Redirigir de nuevo a la página de usuarios después de actualizar
+        header("Location: usuarios.html");
+        exit();
+    } else {
+        echo "No se ha proporcionado un ID de usuario válido.";
+    }
+} else {
+    echo "Método de solicitud no permitido.";
+    exit();
+}
+?>
