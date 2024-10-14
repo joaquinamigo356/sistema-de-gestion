@@ -4,30 +4,21 @@ if (isset($_GET['id'])) {
     $user = 'root';
     $pass = '';
     $db = 'gestion_usuarios';
+ }
+include('conexion.php');
 
-    // Crear conexión
-    $conn = new mysqli($server, $user, $pass, $db);
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $id = $conn->real_escape_string($_POST['id']);
+    
+    $sql = "DELETE FROM usuarios WHERE id = $id";
 
-    // Verificar conexión
-    if ($conn->connect_error) {
-        die("Error de conexión: " . $conn->connect_error);
-    }
-
-    $id = mysqli_real_escape_string($conn, $_GET['id']);
-    $sql = "DELETE FROM usuarios WHERE id=$id";
-
-    // Ejecutar la consulta y verificar el resultado
     if ($conn->query($sql) === TRUE) {
-        echo "Usuario eliminado correctamente.";
+        echo "Usuario eliminado exitosamente.";
     } else {
         echo "Error al eliminar el usuario: " . $conn->error;
     }
 
-    // Cerrar la conexión
     $conn->close();
+    header("Location: usuarios.html");
+    exit();
 }
-
-// Redirigir de vuelta a la página principal de usuarios
-header("Location: usuarios.html");
-exit();
-?>
