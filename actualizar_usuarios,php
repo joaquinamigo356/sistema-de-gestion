@@ -1,37 +1,37 @@
 <?php
-include('conexion.php');
+// Conexión a la base de datos
+$server = 'localhost';
+$user = 'root';
+$pass = '';
+$db = 'gestion_usuarios';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Verificar si el ID está presente
-    if (isset($_POST['id'])) {
-        // Escapar y asignar los valores enviados desde el formulario
-        $id = $conn->real_escape_string($_POST['id']);
-        $nombre = $conn->real_escape_string($_POST['nombre']);
-        $apellido = $conn->real_escape_string($_POST['apellido']);
-        $correo = $conn->real_escape_string($_POST['correo']);
-        $perfil = $conn->real_escape_string($_POST['perfil']);
+$conn = new mysqli($server, $user, $pass, $db);
 
-        // Consulta para actualizar el usuario
-        $sql = "UPDATE usuarios SET nombre='$nombre', apellido='$apellido', correo='$correo', perfil='$perfil' WHERE id=$id";
+// Verificar la conexión
+if ($conn->connect_error) {
+    die("Error de conexión: " . $conn->connect_error);
+}
 
-        // Ejecutar la consulta y verificar si fue exitosa
-        if ($conn->query($sql) === TRUE) {
-            echo "Usuario actualizado exitosamente.";
-        } else {
-            echo "Error al actualizar el usuario: " . $conn->error;
-        }
+// Verificar si se han enviado los datos del formulario
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+    $id = intval($_POST['id']);
+    $nombre = $conn->real_escape_string($_POST['nombre']);
+    $apellido = $conn->real_escape_string($_POST['apellido']);
+    $correo = $conn->real_escape_string($_POST['correo']);
+    $perfil = $conn->real_escape_string($_POST['perfil']);
 
-        // Cerrar la conexión
-        $conn->close();
+    // Actualizar los datos en la base de datos
+    $sql = "UPDATE usuarios SET nombre='$nombre', apellido='$apellido', correo='$correo', perfil='$perfil' WHERE id=$id";
 
-        // Redirigir de nuevo a la página de usuarios después de actualizar
-        header("Location: usuarios.html");
-        exit();
+    if ($conn->query($sql) === TRUE) {
+        echo "Usuario actualizado correctamente.";
     } else {
-        echo "No se ha proporcionado un ID de usuario válido.";
+        echo "Error al actualizar el usuario: " . $conn->error;
     }
 } else {
-    echo "Método de solicitud no permitido.";
-    exit();
+    echo "Datos no válidos.";
 }
+
+// Cerrar la conexión
+$conn->close();
 ?>
