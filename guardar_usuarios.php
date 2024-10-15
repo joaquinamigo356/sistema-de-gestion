@@ -1,5 +1,5 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Datos de conexión a la base de datos
     $server = 'localhost';
     $user = 'root';
@@ -14,19 +14,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         die("Error de conexión: " . $conn->connect_error);
     }
 
-    // Obtener los datos enviados desde el formulario
-    $nombre = $conn->real_escape_string($_POST['nombre']);
-    $apellido = $conn->real_escape_string($_POST['apellido']);
-    $correo = $conn->real_escape_string($_POST['correo']);
-    $perfil = $conn->real_escape_string($_POST['perfil']);
+    // Verificar si se han recibido los datos del formulario
+    if (isset($_POST['id'], $_POST['nombre'], $_POST['apellido'], $_POST['correo'], $_POST['perfil'])) {
+        $id = $conn->real_escape_string($_POST['id']);
+        $nombre = $conn->real_escape_string($_POST['nombre']);
+        $apellido = $conn->real_escape_string($_POST['apellido']);
+        $correo = $conn->real_escape_string($_POST['correo']);
+        $perfil = $conn->real_escape_string($_POST['perfil']);
 
-    // Insertar el usuario en la base de datos
-    $sql = "INSERT INTO usuarios (nombre, apellido, correo, perfil) VALUES ('$nombre', '$apellido', '$correo', '$perfil')";
+        // Consulta de inserción de datos
+        $sql = "INSERT INTO usuarios (id, nombre, apellido, correo, perfil) VALUES ('$id', '$nombre', '$apellido', '$correo', '$perfil')";
 
-    if ($conn->query($sql) === TRUE) {
-        echo "Usuario registrado exitosamente.";
+        // Ejecutar la consulta e informar sobre el resultado
+        if ($conn->query($sql) === TRUE) {
+            echo "Usuario registrado exitosamente.";
+        } else {
+            echo "Error al registrar usuario: " . $conn->error;
+        }
     } else {
-        echo "Error al registrar usuario: " . $conn->error;
+        echo "Por favor, completa todos los campos del formulario.";
     }
 
     // Cerrar la conexión
@@ -35,7 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Redirigir de nuevo a la página de usuarios
     header("Location: usuarios.html");
     exit();
+} else {
+    echo "Solicitud inválida.";
 }
 ?>
-
 
