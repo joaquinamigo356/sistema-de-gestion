@@ -1,0 +1,40 @@
+<?php
+// Conectar a la base de datos
+$conexion = new mysqli('localhost', 'root', '', 'gestion_usuarios');
+
+// Verificar la conexión
+if ($conexion->connect_error) {
+    die('Error de conexión: ' . $conexion->connect_error);
+}
+
+// Verificar si se han enviado los datos del formulario
+if (isset($_POST['computador']) && isset($_POST['dueno']) && isset($_POST['fecha']) && isset($_POST['tecnico']) && isset($_POST['descripcion'])) {
+    $computador_id = $_POST['computador'];
+    $dueno = $_POST['dueno'];
+    $fecha = $_POST['fecha'];
+    $tecnico = $_POST['tecnico'];
+    $descripcion = $_POST['descripcion'];
+
+    // Verificar si el campo 'repuestos' está presente, ya que es opcional
+    $repuestos = isset($_POST['repuestos']) ? implode(', ', $_POST['repuestos']) : '';
+
+    // Preparar la consulta de inserción
+    $sql = "INSERT INTO mantenimiento (computador_id, dueno, fecha, tecnico, repuestos, descripcion) 
+            VALUES (?, ?, ?, ?, ?, ?)";
+
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("isssss", $computador_id, $dueno, $fecha, $tecnico, $repuestos, $descripcion);
+
+    if ($stmt->execute()) {
+        echo "Mantenimiento registrado exitosamente.";
+    } else {
+        echo "Error al registrar el mantenimiento: " . $stmt->error;
+    }
+
+    $stmt->close();
+} else {
+    echo "Por favor, complete todos los campos obligatorios.";
+}
+
+$conexion->close();
+?>
