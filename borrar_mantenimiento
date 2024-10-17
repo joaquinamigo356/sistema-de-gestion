@@ -1,0 +1,31 @@
+<?php
+// Conexión a la base de datos
+$server = 'localhost';
+$user = 'root';
+$pass = '';
+$db = 'gestion_usuarios';
+
+$conn = new mysqli($server, $user, $pass, $db);
+
+// Verificar la conexión
+if ($conn->connect_error) {
+    die("Error de conexión: " . $conn->connect_error);
+}
+
+// Verificar si se ha enviado un ID de mantenimiento
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+    $id = intval($_POST['id']);
+
+    // Eliminar el mantenimiento de la base de datos
+    $sql = "DELETE FROM mantenimientos WHERE id = $id";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "Mantenimiento eliminado correctamente.";
+    } else {
+        echo "Error al eliminar el mantenimiento: " . $conn->error;
+    }
+}
+
+// Cerrar la conexión
+$conn->close();
+?>
