@@ -20,7 +20,7 @@
     <main>
         <h1>Registro de Mantenimiento</h1>
         <p>Aquí puedes registrar y hacer seguimiento de los mantenimientos realizados.</p>
-        
+        <form action="guardar_mantenimiento.php" method="post">
         <form id="mantenimientoForm">
             <label for="computador">Computador:</label>
             <select id="computador" name="computador" onchange="mostrarDueno()">
@@ -32,7 +32,7 @@
 
             <!-- Nuevo campo para mostrar el dueño del computador -->
             <label for="dueno">Dueño del Computador:</label>
-            <input type="text" id="dueno" name="dueno" readonly>
+            <input type="text" id="dueno" name="dueno">
 
             <label for="fecha">Fecha de Mantenimiento:</label>
             <input type="date" id="fecha" name="fecha" required>
@@ -41,8 +41,8 @@
             <input type="text" id="tecnico" name="tecnico" required>
 
             <label for="repuestos">Repuestos Utilizados:</label>
-            <select id="repuestos" name="repuestos[]" multiple>
-                <!-- Las opciones se generarán dinámicamente desde la base de datos -->
+        <input type="text" id="repuestos" name="repuestos">
+
             </select>
 
             <label for="descripcion">Descripción del Mantenimiento:</label>
@@ -59,14 +59,11 @@
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Computador</th>
-                    <th>Dueño</th>
-                    <th>Fecha</th>
-                    <th>Técnico</th>
-                    <th>Repuestos</th>
-                    <th>Descripción</th>
-                    <th>Días desde último mantenimiento</th> <!-- Nueva columna para días -->
+                    <th>Dueño del computador</th>
+                    <th>Fecha de mantenimiento</th>
+                    <th>Técnico responsable</th>
+                    <th>Repuestos Utilizados</th>
                 </tr>
             </thead>
             <tbody id="mantenimientosTable">
@@ -168,3 +165,5 @@
 </body>
 </html>
 
+           
+ 
