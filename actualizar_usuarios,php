@@ -1,9 +1,9 @@
 <?php
-// Conexión a la base de datos
-$server = 'localhost';
-$user = 'root';
-$pass = '';
-$db = 'gestion_usuarios';
+if (($_SERVER['REQUEST_METHOD'] ??'') === 'POST') {
+    $server = 'localhost';
+    $user = 'root';
+    $pass = '';
+    $db = 'gestion_usuarios';
 
 $conn = new mysqli($server, $user, $pass, $db);
 
@@ -34,4 +34,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
 
 // Cerrar la conexión
 $conn->close();
+ }
 ?>
