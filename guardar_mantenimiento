@@ -1,5 +1,9 @@
 <?php
-// Conectar a la base de datos
+if (($_SERVER['REQUEST_METHOD'] ??'') === 'POST') {
+    $server = 'localhost';
+    $user = 'root';
+    $pass = '';
+    $db = 'gestion_usuarios';
 $conexion = new mysqli('localhost', 'root', '', 'gestion_usuarios');
 
 // Verificar la conexión
@@ -37,4 +41,5 @@ if (isset($_POST['computador']) && isset($_POST['dueno']) && isset($_POST['fecha
 }
 
 $conexion->close();
+}
 ?>
