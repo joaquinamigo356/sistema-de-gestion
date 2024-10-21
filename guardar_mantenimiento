@@ -1,45 +1,53 @@
 <?php
-if (($_SERVER['REQUEST_METHOD'] ??'') === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $server = 'localhost';
     $user = 'root';
     $pass = '';
     $db = 'gestion_usuarios';
-$conexion = new mysqli('localhost', 'root', '', 'gestion_usuarios');
 
-// Verificar la conexión
-if ($conexion->connect_error) {
-    die('Error de conexión: ' . $conexion->connect_error);
-}
+    $conn = new mysqli($server, $user, $pass, $db);
 
-// Verificar si se han enviado los datos del formulario
-if (isset($_POST['computador']) && isset($_POST['dueno']) && isset($_POST['fecha']) && isset($_POST['tecnico']) && isset($_POST['descripcion'])) {
-    $computador_id = $_POST['computador'];
-    $dueno = $_POST['dueno'];
-    $fecha = $_POST['fecha'];
-    $tecnico = $_POST['tecnico'];
-    $descripcion = $_POST['descripcion'];
-
-    // Verificar si el campo 'repuestos' está presente, ya que es opcional
-    $repuestos = isset($_POST['repuestos']) ? implode(', ', $_POST['repuestos']) : '';
-
-    // Preparar la consulta de inserción
-    $sql = "INSERT INTO mantenimiento (computador_id, dueno, fecha, tecnico, repuestos, descripcion) 
-            VALUES (?, ?, ?, ?, ?, ?)";
-
-    $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("isssss", $computador_id, $dueno, $fecha, $tecnico, $repuestos, $descripcion);
-
-    if ($stmt->execute()) {
-        echo "Mantenimiento registrado exitosamente.";
-    } else {
-        echo "Error al registrar el mantenimiento: " . $stmt->error;
+    if ($conn->connect_error) {
+        die("Error de conexión: " . $conn->connect_error);
     }
 
-    $stmt->close();
-} else {
-    echo "Por favor, complete todos los campos obligatorios.";
-}
+    if (isset($_POST['computador'], $_POST['dueno'], $_POST['fecha'], $_POST['tecnico'], $_POST['repuestos'], $_POST['descripcion'])) {
+        $computador = (int)$_POST['computador']; // Asegúrate de que sea un entero
+        $dueno = $_POST['dueno'];
+        $fecha = $_POST['fecha'];
+        $tecnico = $_POST['tecnico'];
+        $repuestos = $_POST['repuestos'];
+        $descripcion = $_POST['descripcion'];
 
-$conexion->close();
+        // Verificar que la fecha sea válida
+        if (!DateTime::createFromFormat('Y-m-d', $fecha)) {
+            die("Error: La fecha no es válida. Debe estar en formato YYYY-MM-DD.");
+        }
+
+        $sql = "INSERT INTO mantenimiento (computador, dueno, fecha, tecnico, repuestos, descripcion) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+
+        if ($stmt === false) {
+            die("Error al preparar la consulta: " . $conn->error);
+        }
+
+        $stmt->bind_param("isssss", $computador, $dueno, $fecha, $tecnico, $repuestos, $descripcion);
+
+        if ($stmt->execute()) {
+            echo "Mantenimiento registrado exitosamente.";
+        } else {
+            echo "Error al registrar mantenimiento: " . $stmt->error;
+        }
+
+        $stmt->close();
+    } else {
+        echo "Por favor, completa todos los campos del formulario.";
+    }
+
+    $conn->close();
+    header("Location: mantenimiento.html");
+    exit();
+} else {
+    echo "Solicitud inválida.";
 }
 ?>
