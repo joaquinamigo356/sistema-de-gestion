@@ -11,20 +11,16 @@
         <nav>
             <ul>
                 <li><a href="usuarios.html" class="active">Usuarios</a></li>
-
             </ul>
         </nav>
     </header>
     <main>
         <h1>Gestión de Usuarios</h1>
         <p>Aquí puedes registrar y gestionar los usuarios del sistema.</p>
+        
+      
         <form action="http://localhost/sistema-de-gestion/guardar_usuarios.php" method="POST">
-            <td>
-                <form action="http://localhost/sistema-de-gestion/editar_usuarios.php" method="POST">
-            <form action="http://localhost/sistema-de-gestion/eliminar_usuarios.php" method="POST">
-            <td>
-  
-            <label for="id">id</label>
+            <label for="userID">id:</label>
             <input type="number" id="userID" name="userID" required>
 
             <label for="nombre">nombre:</label>
@@ -42,17 +38,19 @@
                 <option value="tecnico">Técnico</option>
                 <option value="usuario">Usuario</option>
             </select>
-            
+            <button type="submit">Guardar usuario</button>
+        </form>
 
-            <td>
-                <form action="http://localhost/sistema-de-gestion/editar_usuarios.php" method="POST">
-            </td>
-            <form action="http://localhost/sistema-de-gestion/eliminar_usuarios.php" method="POST">
-                
-                <button type="submit">Guardar usuario</button>
-                <button type="submit" onclick="editarUsuario()">Editar Usuario</button>
-                <button type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">Borrar Usuario</button>
-            </td>
+      
+        <form action="http://localhost/sistema-de-gestion/editar_usuarios.php" method="POST">
+            <input type="hidden" id="userID" name="userID" value="">
+            <button type="submit">Editar Usuario</button>
+        </form>
+
+       
+        <form action="http://localhost/sistema-de-gestion/eliminar_usuarios.php" method="POST">
+            <input type="hidden" id="userID" name="userID" value="">
+            <button type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">Borrar Usuario</button>
         </form>
 
         <h2>Usuarios Registrados</h2>
@@ -67,6 +65,7 @@
                 </tr>
             </thead>
             <tbody>
+           
             </tbody>
         </table>
     </main>
