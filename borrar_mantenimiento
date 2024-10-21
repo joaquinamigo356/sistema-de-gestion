@@ -7,16 +7,16 @@ if (($_SERVER['REQUEST_METHOD'] ??'') === 'POST') {
 
 $conn = new mysqli($server, $user, $pass, $db);
 
-// Verificar la conexión
+
 if ($conn->connect_error) {
     die("Error de conexión: " . $conn->connect_error);
 }
 
-// Verificar si se ha enviado un ID de mantenimiento
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $id = intval($_POST['id']);
 
-    // Eliminar el mantenimiento de la base de datos
+    
     $sql = "DELETE FROM mantenimientos WHERE id = $id";
 
     if ($conn->query($sql) === TRUE) {
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     }
 }
 
-// Cerrar la conexión
+
 $conn->close();
  }
 ?>
