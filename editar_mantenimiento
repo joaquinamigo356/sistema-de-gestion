@@ -7,16 +7,15 @@ if (($_SERVER['REQUEST_METHOD'] ??'') === 'POST') {
 
 $conn = new mysqli($server, $user, $pass, $db);
 
-// Verificar la conexión
+
 if ($conn->connect_error) {
     die("Error de conexión: " . $conn->connect_error);
 }
 
-// Verificar si se ha enviado un ID de mantenimiento
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $id = intval($_POST['id']);
 
-    // Obtener los datos del mantenimiento
     $sql = "SELECT * FROM mantenimiento WHERE id = $id";
     $result = $conn->query($sql);
 
