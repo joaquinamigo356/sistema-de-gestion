@@ -1,0 +1,31 @@
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $database = "gestion_usuarios";
+
+    $conn = new mysqli($servername, $username, $password, $database);
+
+    if ($conn->connect_error) {
+        die("Error de conexión: " . $conn->connect_error);
+    }
+
+    if (isset($_POST['mantenimientoID'])) {
+        $mantenimientoID = $conn->real_escape_string($_POST['mantenimientoID']);
+        $sql = "DELETE FROM mantenimiento WHERE id='$mantenimientoID'";
+
+        if ($conn->query($sql) === TRUE) {
+            echo "Mantenimiento eliminado con éxito.";
+        } else {
+            echo "Error al eliminar mantenimiento: " . $conn->error;
+        }
+    } else {
+        echo "ID de mantenimiento no proporcionado.";
+    }
+
+    $conn->close();
+    header("Location: mantenimiento.php");
+    exit();
+}
+?>
