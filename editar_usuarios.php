@@ -1,54 +1,55 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] ??''=== 'POST') {
-    $server = 'localhost';
-    $user = 'root';
-    $pass = '';
-    $db = 'gestion_usuarios';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+   
+    $conexion = new mysqli("localhost", "root", "", "gestion_usuarios");
 
-
-    $conn = new mysqli($server, $user, $pass, $db);
-
-    if ($conn->connect_error) {
-        die("Error de conexión: " . $conn->connect_error);
+    if ($conexion->connect_error) {
+        die("La conexión falló: " . $conexion->connect_error);
     }
 
-  
-    if (isset($_POST['id'])) {
-        $id = $conn->real_escape_string($_POST['id']);
+   
+    if (isset($_POST['userID']) && isset($_POST['nombre']) && isset($_POST['apellido']) && isset($_POST['correo']) && isset($_POST['perfil'])) {
+        
+     
+        $userID = $conexion->real_escape_string($_POST['userID']);
+        $nombre = $conexion->real_escape_string($_POST['nombre']);
+        $apellido = $conexion->real_escape_string($_POST['apellido']);
+        $correo = $conexion->real_escape_string($_POST['correo']);
+        $perfil = $conexion->real_escape_string($_POST['perfil']);
 
-    
-        $sql = "SELECT * FROM usuarios WHERE id = '$id'";
-        $result = $conn->query($sql);
+       
+        $query = "SELECT * FROM usuarios WHERE id = ?";
+        $stmt = $conexion->prepare($query);
+        $stmt->bind_param("i", $userID);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
-            $user = $result->fetch_assoc();
+          
+            $query = "UPDATE usuarios SET nombre = ?, apellido = ?, correo = ?, perfil = ? WHERE id = ?";
+            $stmt = $conexion->prepare($query);
+            $stmt->bind_param("ssssi", $nombre, $apellido, $correo, $perfil, $userID);
 
-            
-            if (isset($_POST['nombre'], $_POST['apellido'], $_POST['correo'], $_POST['perfil'])) {
-                $nombre = $conn->real_escape_string($_POST['nombre']);
-                $apellido = $conn->real_escape_string($_POST['apellido']);
-                $correo = $conn->real_escape_string($_POST['correo']);
-                $perfil = $conn->real_escape_string($_POST['perfil']);
-
-                
-                $sql = "UPDATE usuarios SET nombre='$nombre', apellido='$apellido', correo='$correo', perfil='$perfil' WHERE id='$id'";
-
-                if ($conn->query($sql) === TRUE) {
-                    echo "Usuario actualizado exitosamente.";
-                } else {
-                    echo "Error al actualizar usuario: " . $conn->error;
-                }
+            if ($stmt->execute()) {
+                echo "Usuario actualizado correctamente.";
             } else {
-                echo "Por favor, complete todos los campos requeridos.";
+                echo "Error al actualizar el usuario: " . $stmt->error;
             }
         } else {
-            echo "No se encontró un usuario con el ID proporcionado.";
+            echo "El usuario con ID $userID no existe.";
         }
+
+     
+        $stmt->close();
     } else {
-        echo "ID de usuario no proporcionado.";
+        echo "Por favor, completa todos los campos del formulario.";
     }
 
-    $conn->close();
+  
+    $conexion->close();
+} else {
+    echo "Solicitud inválida.";
 }
 ?>
-  
+
+?>
